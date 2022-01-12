@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- 자바 파일에서 사용한 annotation 설정을 여기서도 사용할 수 있도록 해주는 설정 -->
+	<annotation-driven />
+
+	<resources mapping="/resources/**" location="/resources/" />
+
+	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<beans:property name="prefix" value="/WEB-INF/views/" />
+		<beans:property name="suffix" value=".jsp" />
+		<beans:property name="order" value="1" />
+	</beans:bean>
+	
+	<!-- View 이름을 가지고 직접 View를 선택할 수 있도록 해주는 ViewResolver -->
+	<beans:bean
+	class="org.springframework.web.servlet.view.BeanNameViewResolver">
+		<beans:property name="order" value="0" />
+	</beans:bean>
+		
+	<!-- download 라는 뷰 이름이 왔을 때 DownloadView 로 출력하도록 해주는 설정 -->
+	<!-- com.weather.predict.view 패키지의 DownloadView 를 실행하도록 함 -->
+	<!-- <beans:bean id="download" class="com.weather.predict.view.DownloadView" /> -->
+	
+	
+	<!-- 파일 업로드를 위한 bean 설정 -->
+	<beans:bean id="multipartResolver"
+	class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+	</beans:bean>
+		
+	<!-- 어노테이션이 붙은 클래스의 빈을 자동 생성해주는 패키지 설정 -->
+	<context:component-scan base-package="kr.co.weather" />
+	
+	<!-- 인터셉터 설정 -->
+	<interceptors>
+		<interceptor>
+			<!-- .jsp를 제외한 모든 요청이 오면 BasicInterceptor가 동작 -->
+			<mapping path="/" />
+			<beans:ref bean="basicInterceptor" />
+		</interceptor>
+	</interceptors>
+	
+	<!--controller 가 처리하지 않는 요청은 was가 대신 처리하도록 설정  -->
+	<default-servlet-handler/>
+	
+</beans:beans>

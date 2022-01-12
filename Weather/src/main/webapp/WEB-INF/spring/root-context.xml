@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+
+	<!-- 데이터베이스 접속 정보(DataSource) : MySQL -->
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName">
+			<value>com.mysql.cj.jdbc.Driver</value>
+		</property>
+		<property name="url">
+			<value>
+				jdbc:mysql://localhost:3306/weather?useUnicode=yes&amp;characterEncoding=UTF-8&amp;serverTimezone=UTC
+			</value>
+		</property>
+		<property name="username">
+			<value>user00</value>
+		</property>
+		<property name="password">
+			<value>1234</value>
+		</property>
+	</bean>
+
+	<!-- Mapper 인터페이스를 이용하는 MyBatis 설정 -->
+	<bean id="sqlSessionFactory"
+		class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<!-- Mapper 인터페이스 설정 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="kr.co.weather.dao" />
+	</bean>
+
+	<!-- 트랜잭션 관련 bean -->
+	<!-- Spring JDBC와 MyBatis의 트랜잭션 매니저 -->
+	<bean
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
+		id="transactionManager">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+
+	<!-- annotation을 이용해서 트랜잭션을 사용할 수 있도록 해주는 설정 -->
+	<tx:annotation-driven />
+
+</beans>
