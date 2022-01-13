@@ -9,7 +9,8 @@
 <title>메인페이지</title>
 </head>
 <body>
-	<a href="uploadlocation" style="text-decoration: none">Location업로드</a><br/>
+	<a href="adminpage" style="text-decoration:none">관리자 페이지&nbsp;&nbsp;</a>
+	<a href="userpage" style="text-decoration:none">일반 사용자 페이지</a><br/>
 	<a href="getultrasrtncst" style="text-decoration:none">초단기실황</a><br/>
 	<div id="map" style="width: 450px; height: 600px;"></div>
 </body>

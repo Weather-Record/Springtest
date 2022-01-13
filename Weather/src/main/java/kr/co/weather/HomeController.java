@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -28,17 +29,31 @@ public class HomeController {
 	
 	@Autowired
 	private WeatherService wservice;
-		
+	
+	//메인 페이지
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
 		return "home";
 	}
 	
-	@GetMapping("/uploadlocation")
-	public String fileuploadform() {
-		return "uploadlocationform";
+	//관리자 페이지 -> 로그인 기능 구현 후 수정
+	@GetMapping("/adminpage")
+	public String adminpage() {
+		return "adminpage";
 	}
 	
+	@GetMapping("/userpage")
+	public String userpage() {
+		return "userpage";
+	}
+	
+	//location 업로드 폼
+	@GetMapping("/uploadlocation")
+	public String fileuploadform() {
+		return "/admin/uploadlocationform";
+	}
+	
+	//실제 location 업로드 처리 후 원래 페이지로 이동
 	@RequestMapping(value = "uploadlocation.action", method = RequestMethod.POST)
 	public String fileupload(MultipartHttpServletRequest request, Model model) {
 		MultipartFile excel = request.getFile("excel");
@@ -81,12 +96,4 @@ public class HomeController {
 		return "/api/getultrasrtncst";
 	}	
 	
-	/*
-	@GetMapping("/getwarning") //아직 안 넣음
-	public String getwarning() {
-		wservice.getWarning();
-		//return "getwarning";
-		return "redirect:/";
-	}
-	*/
 }
