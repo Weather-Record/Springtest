@@ -3,11 +3,11 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>upload_location</title>
+<title>upload_record</title>
 </head>
 <body>
-	<h3>MultipartHttpServletRequest 사용</h3>
-	<form action="uploadlocation.action" method="post" enctype="multipart/form-data">
+	<h3>Record 파일 업로드</h3>
+	<form action="uploadrecord" method="post" enctype="multipart/form-data">
 		DB에 업로드 할 파일 : <input type="file" name="excel" /> <br /> 
 		<input type="submit" value="업로드"/>
 	</form>

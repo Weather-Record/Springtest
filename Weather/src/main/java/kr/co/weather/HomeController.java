@@ -49,13 +49,13 @@ public class HomeController {
 	
 	//location 업로드 폼
 	@GetMapping("/uploadlocation")
-	public String fileuploadform() {
+	public String uploadlocationform() {
 		return "/admin/uploadlocationform";
 	}
 	
 	//실제 location 업로드 처리 후 원래 페이지로 이동
-	@RequestMapping(value = "uploadlocation.action", method = RequestMethod.POST)
-	public String fileupload(MultipartHttpServletRequest request, Model model) {
+	@RequestMapping(value = "/uploadlocation.action", method = RequestMethod.POST)
+	public String uploadlocation(MultipartHttpServletRequest request, Model model) {
 		MultipartFile excel = request.getFile("excel");
 		
 		//파일을 업로드 할 경로를 생성
@@ -83,6 +83,41 @@ public class HomeController {
 		return "redirect:/";
 	}
 	
+	//Record 업로드 폼
+	@GetMapping("/uploadrecord")
+	public String uploadrecordform() {
+		return "/admin/uploadrecordform";
+	}
+	
+	@PostMapping("/uploadrecord")
+	public String uploadrecord(MultipartHttpServletRequest request, Model model) {
+		MultipartFile excel = request.getFile("excel");
+		
+		//파일을 업로드 할 경로를 생성
+		//프로젝트 내의 webapp 내의 upload 디렉터리의 절대 경로 생성
+		String uploadPath=
+				request.getServletContext().getRealPath("/excel");
+		
+		//랜덤한 파일명 만들기
+		//추후엔 userid를 함께 받아서 업로드한 사용자명과 올린 파일이름을 함께 알게 해주면 좋을듯
+		String filename = UUID.randomUUID() + excel.getOriginalFilename();
+		
+		//전송할 파일 Path 만들기 -> 역슬래시 주의
+		File filepath = new File( uploadPath + "\\" + filename);
+		//System.out.println(uploadPath+"\"+filename);
+		try {
+			excel.transferTo(filepath);
+			System.out.println("전송 성공");
+		} catch (Exception e) {
+			System.out.println(e.getLocalizedMessage());
+		}
+		//true이면 DB에 삽입 성공, false이면 DB에 삽입 실패 -> 성공하면 메인 페이지 실패하면,?
+		boolean result = wservice.insertRecord(request, filename);
+		model.addAttribute("result", result);
+		//리다이렉트로 바꾸기
+		return "redirect:/";
+	}
+	
 	//초단기 실황 -> 1일 이내만 가능
 	@GetMapping("/getultrasrtncst")
 	public String getultrasrtncst() {
@@ -95,5 +130,6 @@ public class HomeController {
 		model.addAttribute("list", list);
 		return "/api/getultrasrtncst";
 	}	
+	
 	
 }

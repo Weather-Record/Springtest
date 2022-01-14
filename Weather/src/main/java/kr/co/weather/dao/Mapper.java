@@ -23,7 +23,7 @@ public interface Mapper {
 	
 	//Record 테이블에 날씨 정보 삽입하기
 	@Insert("insert into Record(location_id, record_date, avg_tmp, min_tmp, max_tmp, rain_hours, day_rain, max_insta_windspeed, max_windspeed, avg_windspeed, avg_humid, day_snow, accumul_snow) "
-			+ "values(#{location_id}, #{record_date}, #{avg_tmp}, #{min_tmp}, #{max_tmp}, #{rain_hours}, #{day_rain}, #{max_insta_windspeed}, #{max_windspeed}, #{avg_windspeed}, #{avg_humid}, #{day_snow}, #{accumul_snow}")
+			+ "values(#{location_id}, #{record_date}, #{avg_tmp}, #{min_tmp}, #{max_tmp}, #{rain_hours}, #{day_rain}, #{max_insta_windspeed}, #{max_windspeed}, #{avg_windspeed}, #{avg_humid}, #{day_snow}, #{accumul_snow})")
 	public int insertRecord(Record record);
 	
 	//Warning 테이블에 경보 데이터 삽입하기

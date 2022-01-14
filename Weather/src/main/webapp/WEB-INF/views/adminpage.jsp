@@ -7,7 +7,8 @@
 <title>관리자 페이지</title>
 </head>
 <body>
-	<a href="uploadlocation" style="text-decoration: none">Location업로드</a><br/>
+	<li><a href="uploadlocation" style="text-decoration: none">Location업로드</a></li>
+	<li><a href="uploadrecord" style="text-decoration: none">Record업로드</a></li>
 	<br/>
 	<a href="/">메인으로</a><br/>
 </body>

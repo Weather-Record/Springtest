@@ -1,6 +1,6 @@
 package kr.co.weather.domain;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class Record {
 	private int record_id;

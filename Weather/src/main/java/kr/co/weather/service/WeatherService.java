@@ -20,11 +20,13 @@ public interface WeatherService {
 
 	//api로 특보 데이터 불러오기
 	public List<Warning> getWarning();
-	
-	//location 테이블에 자료를 삽입하기 위한 메서드
-	public boolean insertLocation(HttpServletRequest request, String filename);
 
 	//api로 초단기 현황 불러오기 -> 현재 위치는 종로구로 고정되어 있음 수정 가능
 	public Weather getultrasrtncst(String querydate, String querytime) throws IOException, ParseException;
 
+	//location 테이블에 자료를 삽입하기 위한 메서드
+	public boolean insertLocation(HttpServletRequest request, String filename);
+	
+	//record 테이블에 자료를 삽입하기 위한 메서드
+	public boolean insertRecord(HttpServletRequest request, String filename);
 }

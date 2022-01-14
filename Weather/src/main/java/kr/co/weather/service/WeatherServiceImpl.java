@@ -32,6 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 import kr.co.weather.dao.Mapper;
 import kr.co.weather.domain.Grid;
 import kr.co.weather.domain.Location;
+import kr.co.weather.domain.Record;
 import kr.co.weather.domain.Warning;
 import kr.co.weather.domain.Weather;
 
@@ -364,5 +365,129 @@ public class WeatherServiceImpl implements WeatherService {
 		return w1;
 	}
 
+	//record 데이터 업로드
+	@Override
+	@Transactional
+	public boolean insertRecord(HttpServletRequest request, String filename) {
+		boolean result = false;
+		//excel 파일 경로 설정
+		File file = new File(request.getServletContext().getRealPath("/excel/") + filename);
+		//엑셀 파일 오픈
+		HSSFWorkbook wb;
+		try {
+			wb = new HSSFWorkbook(new FileInputStream(file));
+			Sheet sheet = wb.getSheetAt(0);
+			//속성명 받아오기
+			Row tmprow = sheet.getRow(0);
+			Map<String, Object> map  = new HashMap<>();
+			for(int i=0; i<13; i++) {
+				map.put(tmprow.getCell(i).getStringCellValue(), i);
+			}
+			//실제 데이터는 1번째 row부터 시작됨
+			int num = sheet.getPhysicalNumberOfRows();
+			for (int i=1; i<num; i++) {
+				Record record = new Record();
+				Row row = sheet.getRow(i);
+				
+				//지점번호
+				int location_id = 0;
+				try {
+					location_id = (int)row.getCell((Integer)map.get("stnId")).getNumericCellValue();
+					record.setLocation_id(location_id); 
+				}catch(Exception e) {}
+				
+				//시간
+				Date record_date = null;
+				try {
+					record_date =  row.getCell((Integer)map.get("tm")).getDateCellValue();
+					record_date.setDate(record_date.getDate()+1);
+					record.setRecord_date(record_date); //시간
+				} catch (Exception e) {}
+				
+				//평균기온
+				double avg_tmp = 0.0;
+				try {
+					avg_tmp = row.getCell((Integer)map.get("avgTa")).getNumericCellValue();
+					record.setAvg_tmp(avg_tmp);
+				} catch (Exception e) {}
+				
+				//최저기온
+				double min_tmp = 0.0;
+				try {
+					min_tmp = row.getCell((Integer)map.get("minTa")).getNumericCellValue();
+					record.setMin_tmp(min_tmp);
+				} catch (Exception e) {}
+				
+				//최고기온
+				double max_tmp = 0.0;
+				try {
+					max_tmp = row.getCell((Integer)map.get("maxTa")).getNumericCellValue();
+					record.setMax_tmp(max_tmp); //최고기온
+				} catch (Exception e) {}
+				
+				//강수 계속시간
+				double rain_hours = 0.0;
+				try {
+					rain_hours = row.getCell((Integer)map.get("sumRnDur")).getNumericCellValue();
+					record.setRain_hours(rain_hours);
+				} catch (Exception e) {}
+				
+				//일강수량
+				double day_rain = 0.0;
+				try {
+					day_rain = row.getCell((Integer)map.get("sumRn")).getNumericCellValue();
+					record.setDay_rain(day_rain);
+				} catch (Exception e) {}
+				
+				//최대 순간풍속
+				double max_insta_windspeed = 0.0;
+				try {
+					max_insta_windspeed = row.getCell((Integer)map.get("maxInsWs")).getNumericCellValue();
+					record.setMax_insta_windspeed(max_insta_windspeed);
+				} catch (Exception e) {}
+				
+				//최대 풍속
+				double max_windspeed = 0.0;
+				try {
+					max_windspeed = row.getCell((Integer)map.get("maxWs")).getNumericCellValue();
+					record.setMax_windspeed(max_windspeed);
+				} catch (Exception e) {}
+				
+				//평균 풍속
+				double avg_windspeed = 0.0;
+				try {
+					avg_windspeed = row.getCell((Integer)map.get("avgWs")).getNumericCellValue();
+					record.setAvg_windspeed(avg_windspeed);
+				} catch (Exception e) {}
+				
+				//평균 상대습도
+				double avg_humid = 0.0;
+				try {
+					avg_humid = row.getCell((Integer)map.get("avgRhm")).getNumericCellValue();
+					record.setAvg_humid(avg_humid);
+				} catch (Exception e) {}
+				
+				//일 최심신적설
+				double day_snow = 0.0;
+				try {
+					day_snow = row.getCell((Integer)map.get("ddMefs")).getNumericCellValue();
+					record.setDay_snow(day_snow);
+				} catch (Exception e) {}
+				
+				double accumul_snow = 0.0;
+				try {
+					accumul_snow = row.getCell((Integer)map.get("ddMes")).getNumericCellValue();
+					record.setAccumul_snow(accumul_snow); //일 최심적설
+				} catch (Exception e) {}
+				
+				mapper.insertRecord(record);
+				System.out.println(i+" 번 데이터 삽입 성공");
+			}
+			result=true;
+		} catch (Exception e) {
+			System.out.println(e.getLocalizedMessage());
+		}
+		return result;
+	}
 
 }
