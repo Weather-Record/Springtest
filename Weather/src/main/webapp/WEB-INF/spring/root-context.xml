@@ -2,7 +2,9 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
 
 	<!-- 데이터베이스 접속 정보(DataSource) : MySQL -->
@@ -42,6 +44,10 @@
 		id="transactionManager">
 		<property name="dataSource" ref="dataSource"></property>
 	</bean>
+
+	<!-- 어노테이션이 붙은 클래스의 빈을 자동 생성해주는 패키지 설정 -->
+	<!-- test 클래스에서 테스트할 때 주석 처리 제거, namespaces에서 context도 추가 -->
+	<context:component-scan base-package="kr.co.weather" />
 
 	<!-- annotation을 이용해서 트랜잭션을 사용할 수 있도록 해주는 설정 -->
 	<tx:annotation-driven />

@@ -26,7 +26,7 @@ public class BasicInterceptor extends HandlerInterceptorAdapter{
 	private WeatherService wservice;
 
 	@Override
-	//Controller에게 요청을 하기 전에 호출되는 메서드
+	//Controller에게 요청을 하기 전에 호출되는 메서드 -> 변수 static으로 변환 ㄱ
 	//true를 리턴하면 Controller에게 요청 처리 메서드를 호출하고
 	//false를 리턴하면 Controller의 요청 처리 메서드를 호출하지 않음
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {

@@ -16,6 +16,21 @@ public class Warning {
 	private boolean warn_hot;
 	private boolean warn_dry;
 	
+	public Warning(){ //생성자
+		alert_wind = false;
+		alert_rain = false;
+		alert_snow = false;
+		alert_cold = false;
+		alert_hot = false;
+		alert_dry = false;
+		warn_wind = false;
+		warn_rain = false;
+		warn_snow = false;
+		warn_cold = false;
+		warn_hot = false;
+		warn_dry = false;
+	}
+	
 	public int getAlert_id() {
 		return alert_id;
 	}

@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.json.simple.parser.ParseException;
 
 import kr.co.weather.domain.Grid;
+import kr.co.weather.domain.Record;
 import kr.co.weather.domain.Warning;
 import kr.co.weather.domain.Weather;
 
@@ -21,4 +22,6 @@ public interface WeatherService {
 	//api로 초단기 현황 불러오기 -> 현재 위치는 종로구로 고정되어 있음 수정 가능
 	public Weather getultrasrtncst(String grid_x, String grid_y) throws IOException, ParseException;
 
+	//특보 데이터 생성하기
+	public void insertWarning(int record_id);
 }

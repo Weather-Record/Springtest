@@ -28,7 +28,6 @@
 	<!-- com.weather.predict.view 패키지의 DownloadView 를 실행하도록 함 -->
 	<!-- <beans:bean id="download" class="com.weather.predict.view.DownloadView" /> -->
 	
-	
 	<!-- 파일 업로드를 위한 bean 설정 -->
 	<beans:bean id="multipartResolver"
 	class="org.springframework.web.multipart.commons.CommonsMultipartResolver">

@@ -11,7 +11,9 @@ import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -211,6 +213,107 @@ public class WeatherServiceImpl implements WeatherService {
 
 		}	
 		return w1;
+	}
+
+	@Transactional
+	@Override //날짜와 지점으로 수정해야 하는 부분 존재(건조) -> 현재는 테스트 용
+	public void insertWarning(int record_id) {
+		Record record = mapper.selectRecord(record_id);
+		int loc = record.getLocation_id();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Calendar cal = new GregorianCalendar();
+		cal.setTime(record.getRecord_date());
+		cal.add(cal.DAY_OF_MONTH, 1);
+		String date = sdf.format(cal.getTime()); //기억하기
+		Record nextrecord = new Record();
+		//일단 빈 record는 현 레코드와 같은 데이터값으로 처리,,생각해봐야 할 듯
+		try {
+			nextrecord = mapper.recordLocDate(loc, date).get(0); //데이터 중복 고려
+		}catch(Exception e) {
+			System.out.println(e.getLocalizedMessage());
+			nextrecord = record;
+		}
+		cal.add(cal.DAY_OF_MONTH, -2);
+		date = new String(sdf.format(cal.getTime()));
+		Record prevrecord = new Record();
+		try {
+			prevrecord = mapper.recordLocDate(loc, date).get(0); //데이터 중복 고려
+		}catch(Exception e) {
+			System.out.println(e.getLocalizedMessage());
+			prevrecord = record;
+		}
+		//System.out.println(nextrecord.toString());
+		Warning warn = new Warning();
+		warn.setRecord_id(record_id);
+		
+		//강풍
+		if(record.getMax_insta_windspeed() >= 20 || record.getMax_windspeed() >= 14) {
+			if(record.getMax_insta_windspeed() >= 26 || record.getMax_windspeed() >= 21) {
+				warn.setAlert_wind(true); //경보
+			}else {
+				warn.setWarn_wind(true); //주의보
+			}
+		}
+		
+		//호우
+		if(record.getDay_rain()/8 >= 60) {
+			if(record.getDay_rain()/8 >= 90) {
+				warn.setAlert_rain(true); //경보
+			}else {
+				warn.setWarn_rain(true); //주의보
+			}
+		}
+
+		//대설
+		if(record.getDay_snow() >= 5) {
+			if(record.getDay_snow() >= 20) {
+				warn.setAlert_snow(true); //경보
+			}else {
+				warn.setWarn_snow(true); //주의보
+			}
+		}
+
+		//건조 -> 수정 필요 (Mapper 인터페이스에 SQL문 추가)
+		if(record.getAvg_humid() <= 35 && nextrecord.getAvg_humid() <=35) {
+			if(record.getAvg_humid() <= 25 && nextrecord.getAvg_humid() <=25) {
+				warn.setAlert_dry(true); //경보
+			}else {
+				warn.setWarn_dry(true); //주의보
+			}
+		}
+
+		//한파(10~4월) -> 수정 -> 기준 생략했음
+		sdf = new SimpleDateFormat("MM");
+		int month = record.getRecord_date().getMonth()+1; //1월==0부터 시작
+		//System.out.println("month = "+ month);
+		if((month >= 10 || month <= 4) && record.getMin_tmp()<=-12 && nextrecord.getMin_tmp()<=-12) {
+			if(record.getMin_tmp()<=-15 && nextrecord.getMin_tmp()<=-15) {
+				warn.setAlert_cold(true); //경보
+			}else {
+				warn.setWarn_cold(true); //주의보
+			}
+		}
+		if(record.getMin_tmp()<=3 && prevrecord.getMin_tmp()-record.getMin_tmp()>=10) {
+			if(prevrecord.getMin_tmp()-record.getMin_tmp()>=15) {
+				warn.setAlert_cold(true);
+			}else {
+				warn.setWarn_cold(true);
+			}
+		}
+
+		//폭염
+		if(record.getMax_tmp() >= 33 && nextrecord.getMax_tmp() >= 33) {
+			if(record.getMax_tmp() >= 35 && nextrecord.getMax_tmp() >= 35) {
+				warn.setAlert_hot(true); //경보
+			}else {
+				warn.setWarn_hot(true); //주의보
+			}
+		}
+		
+		int result = mapper.insertWarning(warn);
+		//System.out.println("결과 : " + result);
+		System.out.println("record_id : " + record_id + "\n");
+
 	}
 
 

@@ -8,7 +8,8 @@
 </head>
 <body>
 	<li><a href="uploadlocation" style="text-decoration: none">Location업로드</a></li>
-	<li><a href="uploadrecord" style="text-decoration: none">Record업로드</a></li>
+	<li><a href="uploadrecord" style="text-decoration: none">Record업로드(xls파일)</a></li>
+	<li><a href="uploadcsvrecord" style="text-decoration: none">Record업로드(csv파일)</a></li>
 	<br/>
 	<a href="/">메인으로</a><br/>
 </body>
