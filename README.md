@@ -1,4 +1,8 @@
 # Springtest
+<0125 csv파일 업로드, 특보 데이터 변환>
+1) csv파일 업로드 테스트는 서버 구동후 관리자페이지에서 수행(CsvServiceImpl 클래스 참고) 
+2) 특보 데이터 생성 테스트는 WeatherTest1 클래스에서 수행 -> 자신의 record 테이블에 데이터가 있는 경우 가능, 테스트에 사용할 데이터 개수는 본인이 임의로 설정해서 사용
+-> 코드는 WeatherServiceImpl 클래스의 insertWarning 메서드 참고
 
 < 엑셀 데이터 DB(Record) 에 업로드 하는 법 >
 1) context path가 /로 되어 있는지 확인
