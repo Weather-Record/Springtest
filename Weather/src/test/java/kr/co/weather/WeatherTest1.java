@@ -1,6 +1,7 @@
 package kr.co.weather;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -32,15 +33,23 @@ public class WeatherTest1 {
 	@Autowired
 	private WeatherService service;
 
-
-	@Test
+	//@Test
 	public void translateWarning() {
 		//상한은 본인 Record 테이블에 있는 데이터 개수를 사용하거나 그 이하의 작은 수를 넣어서 테스트
-		for(int i=1; i<=172408; i++) {
+		for(int i=1; i<=34674; i++) {
 			service.insertWarning(i);
 		}
 	}
 
+	
+	@Test
+	public void testSearch() throws ParseException {
+		//System.out.println(service.searchRecord(90));
+		service.get_Tmp(90);
+		service.get_rain_humid_snow(90);
+	}
+	
+	
 	/*
 	@Autowired
 	private Mapper mapper;
