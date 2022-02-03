@@ -66,4 +66,5 @@ public class Member {
 				+ ", member_email=" + member_email + ", signup_date=" + signup_date + ", info_modify_date="
 				+ info_modify_date + ", nickname=" + nickname + ", group_id=" + group_id + "]";
 	}
+
 }
